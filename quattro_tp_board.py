@@ -8,10 +8,35 @@ from time import *
 player1_piece = 'Φ' # player's piece
 player2_piece = 'τ' # computer's piece
 
+#### Some functions I need ####
 def prompt(text):
     '''a prompt skeleton'''
     val = input(text)
     return True if val not in ['0', 'N', 'n']  else False
+
+def create_map(coords, dir_dict, direction = 'up'):
+    '''creates a map of coordinates in front of the given coords and puts them
+    in the dictionary 'dir_dict' (refer line no. 131 for an example)'''
+    ## some requisite variables
+    increment = 0
+    if direction == 'up':
+        increment = -1
+    else:
+        increment = 1
+    (dir_dict['front'], dir_dict['left'],
+     dir_dict['right'], dir_dict['diag-left'],
+     dir_dict['diag-right']) =((coords[0], coords[1] + increment),
+                               (coords[0]+increment, coords[1]), (coords[0] - increment, coords[1]),
+                               (coords[0]+increment, coords[1]+increment), (coords[0] - increment, coords[1]+increment))
+    ## Filtering invalid coordinates
+    for i, j in dir_dict.items():
+        for val in j:
+            if val <0 or val >7:
+                dir_dict[i] = None
+                break
+    return dir_dict
+    
+
 
 class InvalidMove(Exception):
     '''error when you/ the computer takes an invalid move'''
@@ -65,59 +90,94 @@ class PlayTable:
             raise InvalidMove(coord)
     def get_piece(self, coords):
         '''returns the piece at coords'''
-        ## Handling out-of-range indices... a messy bit since we're going
-        ## out of the way (i.e, using the indexing system rather the table's
-        ## coordinate system)
-        coords = list(coords)
-        if coords[1] >= 7:
-            coords[1] == 0
-        if coords[1] < 0:
-            coords[1] = 7
-        if coords[0] >= 7:
-            coords[0] == 0
-        if coords[0] < 0:
-            coords[0] = 7
         return self.table[coords[1]][coords[0]]
     
+##    def crossover(self, coord, turn = 'player1'):
+##         '''executes the move 'cross over' for the required player, if necessary'''
+##         do_crossover = prompt("Do you want to cross over? (Y|N)")
+##         passed = False
+##         if do_crossover:
+##            ## evaluate positions capable of crossing over to
+##            side_coords = [(coord[0] + 1, coord[1]), (coord[0]-1, coord[1])] # the boxes on either sides of the piece
+##            front_coord = (coord[0], coord[1] + (1 if turn == 'player2' else -1)) # the box in front
+##            ## (below) the diagonal spaces to evaluate
+##            diag_coords = {(coord[0] + 1, coord[1] + (1 if turn == 'player2' else -1)):False,(coord[0] - 1, coord[1] + (1 if turn == 'player2' else -1)):False} 
+##            is_enemy_in_front = True if self.get_piece(front_coord) == (player2_piece if turn == 'player1' else player1_piece)  else False
+##            is_diag_spc_0_empty = True if self.get_piece(list(diag_coords.keys())[0]) == 0 else False # is the diagonal space empty?? 
+##            is_diag_spc_1_empty = True if self.get_piece(list(diag_coords.keys())[1]) == 0 else False # is the diagonal space empty??
+##            ## Checking for the enemy in the right side and a possibility to corss over
+##            print("Piece at", side_coords[0], " is", self.get_piece(side_coords[0]))
+##            if is_diag_spc_0_empty and (is_enemy_in_front and self.get_piece(side_coords[0]) == (player2_piece if turn == 'player1' else player1_piece)):
+##                diag_coords.update({(coord[0] + 1, coord[1] + (1 if turn == 'player2' else -1)): True})
+##            ## Checking for the enemy in the left side and a possibility to corss over
+##            print("Piece at", side_coords[1], " is", self.get_piece(side_coords[1]))
+##            if is_diag_spc_1_empty and (is_enemy_in_front and self.get_piece(side_coords[1]) == (player2_piece if turn == 'player1' else player1_piece)):
+##                diag_coords.update({(coord[0] - 1, coord[1] + (1 if turn == 'player2' else -1)):True})
+##            movable = []
+##            print("You can cross over to the following coordinates:")
+##            for key, value in diag_coords.items():
+##                if value == True:
+##                    print(key)
+##                    movable.append(key)
+##                else:
+##                    pass
+##            print("Enter the index of the coords you wish to move to from the list:")
+##            for i in range(len(movable)):
+##                print("Index "+str(i), movable[i])
+##            index = input("Index no(Type 'None' if no coords are in the list):")
+##            move_coords  = movable[eval(index)] if eval(index) != None else None
+##            passed = True if eval(index)!= None else False
+##            if passed:
+##                self.table[move_coords[1]][move_coords[0]] = player1_piece if turn == 'player1' else player2_piece
+##                self.table[coord[1]][coord[0]] = 0
+##            return passed
     def crossover(self, coord, turn = 'player1'):
          '''executes the move 'cross over' for the required player, if necessary'''
          do_crossover = prompt("Do you want to cross over? (Y|N)")
          passed = False
+         dirs = {'front':None, 'left':None, 'right': None, 'diag-left':None, 'diag-right':None} # directiosn before the piece
          if do_crossover:
-            ## evaluate positions capable of crossing over to
-            side_coords = [(coord[0] + 1, coord[1]), (coord[0]-1, coord[1])] # the boxes on either sides of the piece
-            front_coord = (coord[0], coord[1] + (1 if turn == 'player2' else -1)) # the box in front
-            ## (below) the diagonal spaces to evaluate
-            diag_coords = {(coord[0] + 1, coord[1] + (1 if turn == 'player2' else -1)):False,(coord[0] - 1, coord[1] + (1 if turn == 'player2' else -1)):False} 
-            is_enemy_in_front = True if self.get_piece(front_coord) == (player2_piece if turn == 'player1' else player1_piece)  else False
-            is_diag_spc_0_empty = True if self.get_piece(list(diag_coords.keys())[0]) == 0 else False # is the diagonal space empty?? 
-            is_diag_spc_1_empty = True if self.get_piece(list(diag_coords.keys())[1]) == 0 else False # is the diagonal space empty??
-            ## Checking for the enemy in the right side and a possibility to corss over
-            print("Piece at", side_coords[0], " is", self.get_piece(side_coords[0]))
-            if is_diag_spc_0_empty and (is_enemy_in_front and self.get_piece(side_coords[0]) == (player2_piece if turn == 'player1' else player1_piece)):
-                diag_coords.update({(coord[0] + 1, coord[1] + (1 if turn == 'player2' else -1)): True})
-            ## Checking for the enemy in the left side and a possibility to corss over
-            print("Piece at", side_coords[1], " is", self.get_piece(side_coords[1]))
-            if is_diag_spc_1_empty and (is_enemy_in_front and self.get_piece(side_coords[1]) == (player2_piece if turn == 'player1' else player1_piece)):
-                diag_coords.update({(coord[0] - 1, coord[1] + (1 if turn == 'player2' else -1)):True})
-            movable = []
-            print("You can cross over to the following coordinates:")
-            for key, value in diag_coords.items():
-                if value == True:
-                    print(key)
-                    movable.append(key)
-                else:
-                    pass
-            print("Enter the index of the coords you wish to move to from the list:")
-            for i in range(len(movable)):
-                print("Index "+str(i), movable[i])
-            index = input("Index no(Type 'None' if no coords are in the list):")
-            move_coords  = movable[eval(index)] if eval(index) != None else None
-            passed = True if eval(index)!= None else False
-            if passed:
-                self.table[move_coords[1]][move_coords[0]] = player1_piece if turn == 'player1' else player2_piece
-                self.table[coord[1]][coord[0]] = 0
-            return passed
+            if turn == 'player1':
+                dirs = create_map(coord, dirs)
+                sides_check = [self.get_piece(dirs['left']) == player2_piece, self.get_piece(dirs['right']) == player2_piece]
+                front_check = self.get_piece(dirs['front']) == player2_piece
+                diagonal_check = [self.get_piece(dirs['diag-left']) == 0, self.get_piece(dirs['diag-right']) == 0]
+                places = ['diag-left','diag-right']
+                available = []
+                for i in range(len(diagonal_check)):
+                    if (diagonal_check[i] and sides_check[i]) and front_check:
+                        available.append(places[i])
+                print("You can cross over to the following coordinates:")
+                for direction in available:
+                    print("[" + str(available.index(direction)) + "]:" + str(dirs[direction]))
+                index = input("Index no(Type 'None' if no coords are in the list):")
+                move_coords  = dirs[available[eval(index)]] if eval(index) != None else None
+                passed = True if eval(index)!= None else False
+                if passed:
+                    self.table[move_coords[1]][move_coords[0]] = player1_piece 
+                    self.table[coord[1]][coord[0]] = 0
+                return passed
+            else:
+                dirs = create_map(coord, dirs, direction = 'down')
+                sides_check = [self.get_piece(dirs['left']) == player1_piece, self.get_piece(dirs['right']) == player1_piece]
+                front_check = self.get_piece(dirs['front']) == player1_piece
+                diagonal_check = [self.get_piece(dirs['diag-left']) == 0, self.get_piece(dirs['diag-right']) == 0]
+                places = ['diag-left','diag-right']
+                available = []
+                for i in range(len(diagonal_check)):
+                    if (diagonal_check[i] and sides_check[i]) and front_check:
+                        available.append(places[i])
+                print("You can cross over to the following coordinates:")
+                for direction in available:
+                    print("[" + str(available.index(direction)) + "]:" + str(dirs[direction]))
+                index = input("Index no(Type 'None' if no coords are in the list):")
+                move_coords  = dirs[available[eval(index)]] if eval(index) != None else None
+                passed = True if eval(index)!= None else False
+                if passed:
+                    self.table[move_coords[1]][move_coords[0]] = player2_piece
+                    self.table[coord[1]][coord[0]] = 0
+                return passed
+                
     def check_victory(self, turn):
             '''checks if the person playing `turn` has won.
                Winning condition - at least four pieces on the enemy side's
