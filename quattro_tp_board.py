@@ -100,9 +100,11 @@ class PlayTable:
          if do_crossover:
             if turn == 'player1':
                 dirs = create_map(coord, dirs)
-                sides_check = [self.get_piece(dirs['left']) == player2_piece, self.get_piece(dirs['right']) == player2_piece]
-                front_check = self.get_piece(dirs['front']) == player2_piece
-                diagonal_check = [self.get_piece(dirs['diag-left']) == 0, self.get_piece(dirs['diag-right']) == 0]
+                sides_check = [(self.get_piece(dirs['left']) if dirs['left'] != None else None)  == player2_piece,
+                               (self.get_piece(dirs['right'])if dirs['right'] != None else None) == player2_piece]
+                front_check = (self.get_piece(dirs['front']) if dirs['front'] != None else None) == player2_piece
+                diagonal_check = [(self.get_piece(dirs['diag-left']) if dirs['diag-left'] != None else None) == 0,
+                                  (self.get_piece(dirs['diag-right'])if dirs['diag-right'] != None else None) == 0]
                 places = ['diag-left','diag-right']
                 available = []
                 for i in range(len(diagonal_check)):
@@ -120,9 +122,11 @@ class PlayTable:
                 return passed
             else:
                 dirs = create_map(coord, dirs, direction = 'down')
-                sides_check = [self.get_piece(dirs['left']) == player1_piece, self.get_piece(dirs['right']) == player1_piece]
-                front_check = self.get_piece(dirs['front']) == player1_piece
-                diagonal_check = [self.get_piece(dirs['diag-left']) == 0, self.get_piece(dirs['diag-right']) == 0]
+                sides_check = [(self.get_piece(dirs['left']) if dirs['left'] != None else None)  == player1_piece,
+                               (self.get_piece(dirs['right'])if dirs['right'] != None else None) == player1_piece]
+                front_check = (self.get_piece(dirs['front']) if dirs['front'] != None else None) == player1_piece
+                diagonal_check = [(self.get_piece(dirs['diag-left']) if dirs['diag-left'] != None else None) == 0,
+                                  (self.get_piece(dirs['diag-right'])if dirs['diag-right'] != None else None) == 0]
                 places = ['diag-left','diag-right']
                 available = []
                 for i in range(len(diagonal_check)):
