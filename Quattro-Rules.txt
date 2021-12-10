@@ -2,17 +2,17 @@ Rules:
 1.  While playing, one can move only one square at a time. Hence, the piece to be moved has to be indicated by the coordinates of the piece, with respect to the provided coordinate system
 2. One can conduct the 'cross-over' move in the situations as mentioned below
 Let P denote the player piece, E for the enemy piece
-|    | E |    |               | P | E |    |
-| E | P |    | ----->    | E |    |    | 
-|    |    |    |               |    |    |    |
+|   | E |   |           | P | E |   |
+| E | P |   | ----->    | E |   |   | 
+|   |   |   |           |   |   |   |
 
-|    | E |    |               |    | E | P |
-|    | P | E | ----->    |    |    | E | 
-|    |    |    |               |    |    |    |
+|   | E |   |           |   | E | P |
+|   | P | E | ----->    |   |   | E | 
+|   |   |   |           |   |   |   |
 
-|    | E |    |               |    | E | P |        |    | E | P |
-| E | P | E | ----->    | E |    | E |  or   | E |    | E |
-|    |    |    |               |    |    |    |        |    |    |    |
+|   | E |   |           |   | E | P |       |   | E | P |
+| E | P | E | ----->    | E |   | E |  or   | E |   | E |
+|   |   |   |           |   |   |   |       |   |   |   |
 
 This move can be executed under these circumstances only, but is independent of the pieces right behind the piece being subjected to the move and those that stand outside this 'square of view'.
 
