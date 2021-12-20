@@ -25,7 +25,7 @@ def gameloop():
             qtp.board.move_piece(player1_mv, turn = 'player1')
         except qtp.InvalidMove:
             # handling an invalid move
-            if qtp.board.table[player1_mv[1]-1][player1_mv[0]] == qtp.player2_piece:
+            if qtp.board.get_piece(player1_mv) == qtp.player1_piece and qtp.board.table[player1_mv[1]-1][player1_mv[0]] == qtp.player2_piece:
                 # checking chances of crossover
                 all_gone_good = qtp.board.crossover(player1_mv, turn = 'player1')
             else:
@@ -56,7 +56,7 @@ def gameloop():
                     print(qtp.board)
                     all_gone_good = True
                 except qtp.InvalidMove:
-                    if qtp.board.table[player2_mv[1]+1][player2_mv[0]] == qtp.player1_piece:
+                    if qtp.board.get_piece(player2_mv) == qtp.player2_piece and qtp.board.table[player2_mv[1]+1][player2_mv[0]] == qtp.player1_piece:
                         all_gone_good = qtp.board.crossover(player2_mv, turn = 'player2')
                     else:
                         print("Invalid move at",player2_mv)
