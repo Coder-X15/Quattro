@@ -1,8 +1,6 @@
 # quattro_tp_board.py
 # Two player edition of Quattro (board utils in this file)
 
-from time import *
-
 # 'Quattro' - a clone of chess
 
 player1_piece = 'Φ' # player's piece
