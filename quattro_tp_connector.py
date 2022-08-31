@@ -28,3 +28,25 @@ def check_user(username):
     save_cursor.execute('select user_name from user_registry')
     list_of_users = save_cursor.fetchall()
     return ((username,) in list_of_users)
+
+def retrieve_scores(player1_name, player2_name):
+    '''retrieves a record of previous matches between player1 and player2'''
+    try:
+        save_cursor.execute(f'select * from {player1_name}vs{player2_name}')
+        match_history = save_cursor.fetchall()
+        print('-' * 68)
+        print(f'Match day \t \t {player1_name} \t \t {player2_name}')
+        for tup in match_history:
+            print(tup[0], " \t \t \t", tup[1], "\t \t \t", tup[2])
+    except:
+        print("Never have they played against each other; perhaps the latter took the role of player 1 or maybe you got either of their names wrong??")
+def continue_today(player1_name, player2_name):
+    '''retrieves the scores from the last game played on the current day'''
+    try:
+        save_cursor.execute(f'select {player1_name},{player2_name} from {player1_name}vs{player2_name} where matchday = current_date();')
+        op = save_cursor.fetchall()
+        print(op)
+        return op
+    except:
+        pass
+        

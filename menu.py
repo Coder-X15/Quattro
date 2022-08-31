@@ -28,6 +28,7 @@ def menu():
     print("[2] GAME RULES")
     print("[3] VIEW CURRENT SCORES")
     print("[4] REGISTER USER")
+    print("[5] VIEW PREVIOUS SCORES")
     print("[0] EXIT GAME")
 
 def enter_game():
@@ -49,6 +50,10 @@ while option !=0:
         if not check_user(playerB):
             print("@auth::You hadn't registered before; but we'll register you as a newcomer.")
             register_user(playerB)
+        prev_scores_today = continue_today(playerA, playerB)
+        if prev_scores_today != None:
+            qtm.player1_score = prev_scores_today[0][0]
+            qtm.player2_score = prev_scores_today[0][1]
         enter_game()
         match_save(playerA,playerB, [qtm.player1_score, qtm.player2_score])
     elif option == 2:
@@ -81,6 +86,10 @@ while option !=0:
             register_user(name)
             print("Registered successfully!")
             finish = not(qtm.qtp.prompt("Do you want to register more users?:"))
+    elif option == 5:
+        playerA = input("Enter @Player1 's name:")
+        playerB = input("Enter @Player2 's name:")
+        retrieve_scores(playerA, playerB)
     else:
         print("Invalid option...")
 
