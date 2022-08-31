@@ -18,7 +18,7 @@ I guess you all can understand what purpose each file serves in the code from th
 * My teammates, Paul Ranjith and Raamsaran Samith
 * My Class Teacher, Mrs Jeena Seby, who is also my computer science teacher
 * Sinan Islekdemir, a GitHub user and a person whom I refer to frequently regarding code and stuff
-* user253751 aka immibis on Stack Exchange (I found him for reference on AI SE and yeah, he advised me well, but seems like I couldn't put things running well.... still the person helped me change my perception about perceptrons)
+* user253751 aka immibis on Stack Exchange (I found him for reference on AI SE and he advised me well, but seems like I couldn't put things running well.... still the person helped me change my perception about perceptrons)
 
 ## Updates
 * 31/8/2022 : Added SQL connectivity for saving data.
