@@ -45,11 +45,17 @@ while option !=0:
         playerA = input("Enter @Player1 's name:")
         if not check_user(playerA):
             print("@auth::You hadn't registered before; but we'll register you as a newcomer.")
-            register_user(playerA)
+            try:
+                register_user(playerA)
+            except:
+                print("A similar user exists, hence we allow you entry as that user.")
         playerB = input("Enter @Player2 's name:")
         if not check_user(playerB):
             print("@auth::You hadn't registered before; but we'll register you as a newcomer.")
-            register_user(playerB)
+            try:
+                register_user(playerB)
+            except:
+                print("A similar user exists, hence we allow you entry as that user.")
         prev_scores_today = continue_today(playerA, playerB)
         if prev_scores_today != None:
             qtm.player1_score = prev_scores_today[0][0]
@@ -78,7 +84,10 @@ while option !=0:
         print("|   |   |   |          |   |   |   |        |   |   |   |") 
     elif option == 3:
         print("Current score status:")
-        print(f'@Player1({playerA})::',qtm.player1_score,f'\n@Player2({playerB})::',qtm.player2_score)
+        try:
+            print(f'@Player1({playerA})::',qtm.player1_score,f'\n@Player2({playerB})::',qtm.player2_score)
+        except:
+            print("You haven't started playing yet!")
     elif option == 4:
         finish = False
         while not finish:
