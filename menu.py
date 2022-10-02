@@ -22,6 +22,15 @@ print()
 ###########
 ## Some functions
 ###########
+def extract_from_file(txt_file):
+    'extracts text data from text file "txt_file"'
+    data = None
+    try:
+        with open(txt_file, 'r') as file:
+            data = file.readlines()
+    except:
+        print("Oops! File not available!")
+    return data
 
 def menu():
     print("[1] START GAME")
@@ -29,6 +38,7 @@ def menu():
     print("[3] VIEW CURRENT SCORES")
     print("[4] REGISTER USER")
     print("[5] VIEW PREVIOUS SCORES")
+    print("[6] CREADITS")
     print("[0] EXIT GAME")
 
 def enter_game():
@@ -99,6 +109,11 @@ while option !=0:
         playerA = input("Enter @Player1 's name:")
         playerB = input("Enter @Player2 's name:")
         retrieve_scores(playerA, playerB)
+    elif option == 6:
+        credits = extract_from_file('E:\\Quattro v2\\Quattro-2\\credits.txt')
+        if credits != None:
+            for line in credits:
+                print(line)
     else:
         print("Invalid option...")
 
